@@ -1,5 +1,5 @@
 # makfile configuration
-COMMON_OBJECTS  = main.o 
+COMMON_OBJECTS  = main.o  # Wdinterrupthandler.o 
 CPU             = msp430g2553
 CFLAGS          = -mmcu=${CPU} -I../h
 LDFLAGS		= -L/opt/ti/msp430_gcc/include 
@@ -8,25 +8,19 @@ LDFLAGS		= -L/opt/ti/msp430_gcc/include
 CC              = msp430-elf-gcc
 AS              = msp430-elf-as
 
-all: led-c.elf led-s.elf 
+all: led.elf 
 
 #additional rules for files
-led-c.elf: ${COMMON_OBJECTS} greenControl-c.o
-	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^ ../lib/libTimer.a
-led-s.elf: ${COMMON_OBJECTS} redControl-s.o
+led.elf: ${COMMON_OBJECTS} 
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^ ../lib/libTimer.a
 
-load-c: led-c.elf
-	msp430loader.sh $^
-
-load-s: led-s.elf 
-	msp430loader.sh $^
+load: led.elf
+	msp430loader.sh led.elf
 
 clean:
 	rm -f *.o *.elf
 
 main.o: led.h
-greenControl-c.o: led.h
+
 wdInterruptHandler.o:  led.h
 
-green-on-c.o: led.h greenControl_c.c
